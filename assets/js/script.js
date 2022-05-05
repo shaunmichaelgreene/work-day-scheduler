@@ -1,5 +1,10 @@
 var descriptionEl = document.querySelector(".description");
+var tasks = {};
 
+var saveTasks = function() {
+    console.log(tasks)
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+};
 var classRemover = function(blockValue) {
     $(blockValue.children[1]).removeClass("past");
     $(blockValue.children[1]).removeClass("future");
@@ -47,17 +52,60 @@ var refreshShading = function(blockDescription) {
     };
 };
 
+//description element click listener to add & edit text
+$(".description").on("click", function() {
+    var blockText = $(this).find("p").text().trim(); //get existing text value
+    console.log(blockText)
+    //get block ID too?
+    //replace p element with a new text area
+    var textInput = $("<textarea>").addClass("w-100").val(blockText);
+    $(this).find("p").replaceWith(textInput);
+    //autofocus on new text area
+    textInput.trigger("focus");
+    //enable save button at this point?
+});
 
+//way to make the input field stay active when clicked away? like on blur: do nothing?
 
-// console.log(current.getHours()); 
+//save button clicked 
+$(".saveBtn").on("click", function() {
+    var descriptionText = $(".description textarea").val();
+    console.log(this.descriptionText);
+    // var blockText = $(this).siblings(".description-text").find("p").text(); //get current value of text area
+    var timeBlock = $(this).closest(".time-block").attr("id");
+    console.log("The save button that was just clicked is for timeBlock: " + timeBlock + ", and the text says: " + descriptionText);
+    if (descriptionText) {
+        var textAreaEl = $("<p>").text(descriptionText);
+        $(".description textarea").replaceWith(textAreaEl);
+        var newTask = {
+            content: descriptionText,
+            id: timeBlock
+        };
+        tasks.push(newTask);
+        saveTasks();
+    } else {
+        var textAreaEl = $("<p>");
+        $(".description textarea").replaceWith(textAreaEl);
+    }
+    });
 
-// if (moment().isAfter(currentTime)) {
-//     $(descriptionEl).addClass("future");
-// } else if (moment().isBefore(currentTime)) {
-//     $(descriptionEl).addClass("past");
-// } else if (moment().isSame(currentTime, 'hour')) {
-//     $(descriptionEl).addClass("present");
-// }
+    // $(".time-block").on("click", ".saveBtn", function() {
+
+    
+var loadTasks = function() {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+    if (!tasks) {
+        tasks = [];
+    } else {
+        $.each(tasks, function (e) {
+            var blockID = $(this).attr("id");
+            var blockDescription = $(this).attr("content");
+            var blockText = $("#" + blockID).find("p");
+            blockText.text(blockDescription);
+        })
+    }
+}
+
 
 
 
