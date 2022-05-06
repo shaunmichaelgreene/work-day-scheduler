@@ -1,10 +1,28 @@
 var descriptionEl = document.querySelector(".description");
-var tasks = {};
+var tasks = [];
 
 var saveTasks = function() {
     console.log(tasks)
     localStorage.setItem("tasks", JSON.stringify(tasks));
 };
+
+var loadTasks = function() {
+    tasks = JSON.parse(localStorage.getItem("tasks"));
+    if (!tasks) {
+        tasks = [];
+    } else {
+        $.each(tasks, function (e) {
+            var blockID = $(this).attr("id");
+            console.log(blockID);
+            var blockDescription = $(this).attr("content");
+            console.log(blockDescription);
+            var blockTextEl = $("#" + blockID).find("p");
+            console.log(blockTextEl);
+            blockTextEl.text(blockDescription);
+        })
+    }
+}
+
 var classRemover = function(blockValue) {
     $(blockValue.children[1]).removeClass("past");
     $(blockValue.children[1]).removeClass("future");
@@ -54,24 +72,42 @@ var refreshShading = function(blockDescription) {
 
 //description element click listener to add & edit text
 $(".description").on("click", function() {
-    var blockText = $(this).find("p").text().trim(); //get existing text value
-    console.log(blockText)
+    var descriptionText = $(this).find("p").text().trim(); //get existing text value
+    console.log(descriptionText)
     //get block ID too?
     //replace p element with a new text area
-    var textInput = $("<textarea>").addClass("w-100").val(blockText);
+    var textInput = $("<textarea>").addClass("w-100").val(descriptionText);
     $(this).find("p").replaceWith(textInput);
     //autofocus on new text area
     textInput.trigger("focus");
-    //enable save button at this point?
 });
 
+$(".description").on("blur", "textarea", function() {
+    var descriptionText = $(this).val();
+    var timeBlock = $(this).closest(".time-block").attr("id");
+    console.log(descriptionText);
+    if (descriptionText) {
+        var textAreaEl = $("<p>").text(descriptionText);
+        $(this).replaceWith(textAreaEl);
+        
+        var newTask = {
+            content: descriptionText,
+            id: timeBlock
+        };
+        console.log(newTask);
+        tasks.push(newTask);
+    } else {
+        var textAreaEl = $("<p>");
+        $(this).replaceWith(textAreaEl);
+    }
+});
 //way to make the input field stay active when clicked away? like on blur: do nothing?
 
 //save button clicked 
 $(".saveBtn").on("click", function() {
-    var descriptionText = $(".description textarea").val();
-    console.log(this.descriptionText);
-    // var blockText = $(this).siblings(".description-text").find("p").text(); //get current value of text area
+    // var descriptionText = $(".description textarea").val();
+    var descriptionText = $(this).siblings(".description").find("p").text(); //get current value of text area
+    console.log(descriptionText);
     var timeBlock = $(this).closest(".time-block").attr("id");
     console.log("The save button that was just clicked is for timeBlock: " + timeBlock + ", and the text says: " + descriptionText);
     if (descriptionText) {
@@ -81,6 +117,10 @@ $(".saveBtn").on("click", function() {
             content: descriptionText,
             id: timeBlock
         };
+        if (Array.isArray(newTask)){
+
+            console.log(newTask);
+        }
         tasks.push(newTask);
         saveTasks();
     } else {
@@ -88,23 +128,10 @@ $(".saveBtn").on("click", function() {
         $(".description textarea").replaceWith(textAreaEl);
     }
     });
-
+loadTasks();
     // $(".time-block").on("click", ".saveBtn", function() {
 
     
-var loadTasks = function() {
-    tasks = JSON.parse(localStorage.getItem("tasks"));
-    if (!tasks) {
-        tasks = [];
-    } else {
-        $.each(tasks, function (e) {
-            var blockID = $(this).attr("id");
-            var blockDescription = $(this).attr("content");
-            var blockText = $("#" + blockID).find("p");
-            blockText.text(blockDescription);
-        })
-    }
-}
 
 
 
