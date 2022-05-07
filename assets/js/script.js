@@ -74,7 +74,6 @@ var refreshShading = function(blockDescription) {
 $(".description").on("click", function() {
     var descriptionText = $(this).find("p").text().trim(); //get existing text value
     console.log(descriptionText)
-    //get block ID too?
     //replace p element with a new text area
     var textInput = $("<textarea>").addClass("w-100").val(descriptionText);
     $(this).find("p").replaceWith(textInput);

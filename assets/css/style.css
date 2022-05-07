@@ -4,13 +4,33 @@ body {
   line-height: 1;
 }
 
-textarea{
+/* textarea {
   background: transparent;
   border: none;
   resize: none;
   color: #000000;
   border-left: 1px solid black;
   padding: 10px;
+} */
+
+textarea {
+  padding: 0;
+  margin: 0;
+}
+
+textarea, .description-text {
+  background: transparent;
+  border: none;
+  resize: none;
+  color: #000000;
+  /* border-left: 1px solid black; */
+  /* height: 100% */
+  /* padding: 10px; */
+}
+
+textarea, .description, .description-text {
+  height: 100%;
+  text-align: left;
 }
 
 .jumbotron {
@@ -21,8 +41,13 @@ textarea{
   border-bottom: 10px solid black;
 }
 
-.description{
+.description {
   white-space: pre-wrap;
+  padding-left: 15px;  
+  border-left: 1px solid black;
+  
+  /* removing padding left fixes alignmnet issue with left border, but moves saveBtn off-center */
+  /* removing padding right fixes this */
 }
 
 .time-block{
