@@ -23,11 +23,10 @@ var loadTasks = function() {
     }
 }
 
-var classRemover = function(blockValue) {
+var classRemover = function(blockValue) { //strips time-based classes from the description elements
     $(blockValue.children[1]).removeClass("past");
     $(blockValue.children[1]).removeClass("future");
     $(blockValue.children[1]).removeClass("present");
-    console.log("the classRemover function has stripped a class");
 };
 
 var blockShading = function() { //handles initial shading of the time blocks
@@ -47,7 +46,7 @@ var blockShading = function() { //handles initial shading of the time blocks
     };
 };
 
-blockShading();
+blockShading(); //shade the description elements with time-based classes upon page load
 
 setInterval(function () {
     $(".description").each(function(i, descriptionEl) { //loops through each Time Block Description element (9AM-5PM)
@@ -77,19 +76,19 @@ $(".description").on("click", function() {
     //replace p element with a new text area
     var textInput = $("<textarea>").addClass("w-100").val(descriptionText);
     $(this).find("p").replaceWith(textInput);
-    //autofocus on new text area
-    textInput.trigger("focus");
+    textInput.trigger("focus");     //autofocus on new text area
 });
 
-$(".description").on("blur", "textarea", function() {
+
+$(".description").on("blur", "textarea", function() { //event listener for when focus is removed from textarea element
     var descriptionText = $(this).val();
     var timeBlock = $(this).closest(".time-block").attr("id");
     console.log(descriptionText);
     if (descriptionText) {
         var textAreaEl = $("<p>").text(descriptionText);
-        $(this).replaceWith(textAreaEl);
+        $(this).replaceWith(textAreaEl); //replace the description-text <p> placeholder's text content with the user input in the textarea
         
-        var newTask = {
+        var newTask = { 
             content: descriptionText,
             id: timeBlock
         };
@@ -100,7 +99,6 @@ $(".description").on("blur", "textarea", function() {
         $(this).replaceWith(textAreaEl);
     }
 });
-//way to make the input field stay active when clicked away? like on blur: do nothing?
 
 //save button clicked 
 $(".saveBtn").on("click", function() {
@@ -112,7 +110,7 @@ $(".saveBtn").on("click", function() {
     if (descriptionText) {
         var textAreaEl = $("<p>").text(descriptionText);
         $(".description textarea").replaceWith(textAreaEl);
-        var newTask = {
+        var newTask = {  //create new object to store task data
             content: descriptionText,
             id: timeBlock
         };
@@ -120,7 +118,7 @@ $(".saveBtn").on("click", function() {
 
             console.log(newTask);
         }
-        tasks.push(newTask);
+        tasks.push(newTask); //push task to main task array for later saving to localStorage
         saveTasks();
     } else {
         var textAreaEl = $("<p>");
@@ -128,20 +126,7 @@ $(".saveBtn").on("click", function() {
     }
     });
 loadTasks();
-    // $(".time-block").on("click", ".saveBtn", function() {
 
-    
-
-
-
-
-//add new class if time is in the future
-//1. identify current time in relative context (by hour)
-//2. identify past/present/future variables
-//2. establish rules for how often to check time (setInterval)
-//3. establish rules for how to address past, present, future
-//4. loop continuously
-//5. reset each day at midnight
 
 //CODE GRAVEYARD
 // console.log($(".description"));
