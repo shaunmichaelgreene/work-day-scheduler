@@ -13,11 +13,11 @@ var loadTasks = function() {
     } else {
         $.each(tasks, function (e) {
             var blockID = $(this).attr("id");
-            console.log(blockID);
+            // console.log(blockID);
             var blockDescription = $(this).attr("content");
-            console.log(blockDescription);
+            // console.log(blockDescription);
             var blockTextEl = $("#" + blockID).find("p");
-            console.log(blockTextEl);
+            // console.log(blockTextEl);
             blockTextEl.text(blockDescription);
         })
     }
@@ -72,7 +72,7 @@ var refreshShading = function(blockDescription) {
 //description element click listener to add & edit text
 $(".description").on("click", function() {
     var descriptionText = $(this).find("p").text().trim(); //get existing text value
-    console.log(descriptionText)
+    // console.log(descriptionText)
     //replace p element with a new text area
     var textInput = $("<textarea>").addClass("w-100").val(descriptionText);
     $(this).find("p").replaceWith(textInput);
@@ -83,7 +83,7 @@ $(".description").on("click", function() {
 $(".description").on("blur", "textarea", function() { //event listener for when focus is removed from textarea element
     var descriptionText = $(this).val();
     var timeBlock = $(this).closest(".time-block").attr("id");
-    console.log(descriptionText);
+    // console.log(descriptionText);
     if (descriptionText) {
         var textAreaEl = $("<p>").text(descriptionText);
         $(this).replaceWith(textAreaEl); //replace the description-text <p> placeholder's text content with the user input in the textarea
@@ -92,7 +92,7 @@ $(".description").on("blur", "textarea", function() { //event listener for when 
             content: descriptionText,
             id: timeBlock
         };
-        console.log(newTask);
+        // console.log(newTask);
         tasks.push(newTask);
     } else {
         var textAreaEl = $("<p>");
@@ -104,7 +104,7 @@ $(".description").on("blur", "textarea", function() { //event listener for when 
 $(".saveBtn").on("click", function() {
     // var descriptionText = $(".description textarea").val();
     var descriptionText = $(this).siblings(".description").find("p").text(); //get current value of text area
-    console.log(descriptionText);
+    // console.log(descriptionText);
     var timeBlock = $(this).closest(".time-block").attr("id");
     console.log("The save button that was just clicked is for timeBlock: " + timeBlock + ", and the text says: " + descriptionText);
     if (descriptionText) {
